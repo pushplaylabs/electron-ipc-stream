@@ -1,4 +1,3 @@
-const bufferJson = require('buffer-json')
 const Duplex = require('stream').Duplex
 const ipcRenderer = require('electron').ipcRenderer
 const util = require('util')
@@ -13,9 +12,6 @@ function RendIPCStream (channel, streamOpts) {
   this.channel = channel
 
   const ipcCallback = (event, data) => {
-    if (typeof data === 'string') {
-      data = JSON.parse(data, bufferJson.reviver)
-    }
     this.push(data)
   }
   ipcRenderer.on(this.channel, ipcCallback)
@@ -33,13 +29,6 @@ util.inherits(RendIPCStream, Duplex)
 RendIPCStream.prototype._read = function () { }
 
 RendIPCStream.prototype._write = function (data, enc, next) {
-  if (typeof data === 'string') {
-    data = JSON.stringify(data)
-  }
-  if (Buffer.isBuffer(data)) {
-    data = JSON.stringify(data, null, bufferJson.replacer)
-  }
-
   ipcRenderer.send(this.channel, data)
   next()
 }

@@ -30,7 +30,6 @@
     "electron-window": "^0.6.2"
   },
   "dependencies": {
-    "buffer-json": "^1.0.0",
     "is-electron-renderer": "^2.0.0"
   }
 }
